@@ -1,6 +1,6 @@
-# bootcamp_Navbar
+# VUE_SPA_GSAP
 
 > A Vue.js project
 
-## Building a Navbar component
+## Vue single page application
 

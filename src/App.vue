@@ -10,6 +10,9 @@
       </NavBar>
       <router-view/>
       <div class='col-sm-1 d-btn btn' id='d-u' v-on:click="move">Do Stuff</div>
+      <div class='col-sm-1 d-btn btn' id='pause' v-on:click="pause">Pause</div>
+      <div class='col-sm-1 d-btn btn' id='resume' v-on:click="resume">Resume</div>
+      <div class='col-sm-1 d-btn btn' id='reverse' v-on:click="reverse">Reverse</div>
 
     </div>
   </div>
@@ -41,6 +44,8 @@ export default {
   },
   data () {
     return {
+      tl: new TimelineLite(),
+      splitTextTimeline: new TimelineLite(),
       title: 'Vue Router Single Page Application - with a bunch of Greensock stuff added in',
       buttonLinks: [
         ['/home', 'Home'],
@@ -55,38 +60,33 @@ export default {
 
       TweenLite.set('body', {visibility:"visible"})
 
-      //instantiate a TimelineLite
-      var tl = new TimelineLite();
-
       //use position parameter "+=0.5" to schedule next tween 0.5 seconds after previous tweens end
-      tl.from('.jumbotron', 0.5, {scale:.5, autoAlpha:0}, "+=0.5");
+      this.tl.from('.jumbotron', 0.5, {scale:.5, autoAlpha:0}, "+=0.5");
 
       // 3d rotating
       TweenLite.set('.jumbotron', {css:{transformPerspective:400, transformStyle:"preserve-3d"}});
-      tl.fromTo('.jumbotron', .05, {css:{autoAlpha:0}}, {css:{autoAlpha:1}, immediateRender:true})
+      this.tl.fromTo('.jumbotron', .05, {css:{autoAlpha:0}}, {css:{autoAlpha:1}, immediateRender:true})
         .to('.jumbotron', 0.7, {css:{rotationY:-30, rotationX:20}});
 
-      tl.to('.jumbotron', 1, {css:{rotationY:180, z:-180}, ease:Power2.easeOut}, "+=0.2")
+      this.tl.to('.jumbotron', 1, {css:{rotationY:180, z:-180}, ease:Power2.easeOut}, "+=0.2")
         .to('.jumbotron', 1, {css:{rotationX:360, z:-10}})
         .to('.jumbotron', 1, {css:{rotationY:360, z:0}, ease:Power2.easeOut}, "+=0.2");
 
       // Nav bar
-      tl.from('#nav-demo', 1, {left:-200, opacity:0});
+      this.tl.from('#nav-demo', 1, {left:-200, opacity:0});
 
       // SplitText stuff
-      var splitTextTimeline = new TimelineLite();
-
       var h1SplitText = new SplitText('h1', {type:"words"});
 
       h1SplitText.split({type:"chars, words, lines"})
-      splitTextTimeline.staggerFrom(h1SplitText.chars, 0.2, {autoAlpha:0, scale:4, force3D:true}, 0.02, 4.0)
+      this.splitTextTimeline.staggerFrom(h1SplitText.chars, 0.2, {autoAlpha:0, scale:4, force3D:true}, 0.02, 4.0)
         .staggerTo(h1SplitText.words, 0.1, {color:"#8FE402", scale:0.9}, 0.1, "words")
         .staggerTo(h1SplitText.words, 0.2, {color:"white", scale:1}, 0.1, "words+=0.1")
         .staggerTo(h1SplitText.lines, 0.5, {x:0, autoAlpha:1}, 0.2).eventCallback("onComplete", reset)
 
       var pSplitText = new SplitText('p', {type:"words"});
       pSplitText.split({type:"chars, words"})
-      tl.staggerFrom(pSplitText.chars, 0.4, {scale:7, autoAlpha:0,  rotationX:-180,  transformOrigin:"100% 50%", ease:Back.easeOut}, 0.02, 4.0);
+      this.tl.staggerFrom(pSplitText.chars, 0.4, {scale:7, autoAlpha:0,  rotationX:-180,  transformOrigin:"100% 50%", ease:Back.easeOut}, 0.02, 4.0);
 
       /// reset html to original state
       function reset(){
@@ -95,17 +95,17 @@ export default {
       }
 
     },
-    moveUp: function() {
-      TweenMax.to("#nav-test", 5, {y:0});
+    pause: function() {
+      this.tl.pause();
+      this.splitTextTimeline.pause();
     },
-    moveDown: function() {
-      TweenMax.to("#nav-test", 15, {y:1000});
+    resume: function() {
+      this.tl.resume();
+      this.splitTextTimeline.resume();
     },
-    moveLeft: function() {
-      TweenMax.to("#nav-test", 5, {x:0});
-    },
-    moveRight: function() {
-      TweenMax.to("#nav-test", 5, {x:1000});
+    reverse: function() {
+      this.tl.reverse();
+      this.splitTextTimeline.reverse();
     }
   },
   created: function () {

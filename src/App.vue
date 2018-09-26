@@ -126,7 +126,8 @@ export default {
       TweenMax.to("#nav-test", 5, {x:0});
     },
     moveRight: function() {
-      TweenMax.to("#nav-test", 5, {x:1000});          }
+      TweenMax.to("#nav-test", 5, {x:1000});
+    }
   },
   created: function () {
     // EventBus.$on('button-clicked', this.buttonClicked);

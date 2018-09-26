@@ -10,8 +10,7 @@
       </NavBar>
       <router-view/>
       <div class='col-sm-1 d-btn btn' id='d-u' v-on:click="move">Do Stuff</div>
-      <div class='col-sm-1 d-btn btn' id='pause' v-on:click="pause">Pause</div>
-      <div class='col-sm-1 d-btn btn' id='resume' v-on:click="resume">Resume</div>
+      <div class='col-sm-1 d-btn btn' id='pause' v-on:click="pause">Pause/Resume</div>
       <div class='col-sm-1 d-btn btn' id='reverse' v-on:click="reverse">Reverse</div>
 
     </div>
@@ -57,6 +56,8 @@ export default {
   },
   methods: {
     move: function() {
+      this.tl = new TimelineLite();
+      this.splitTextTimeline = new TimelineLite();
 
       TweenLite.set('body', {visibility:"visible"})
 
@@ -96,16 +97,17 @@ export default {
 
     },
     pause: function() {
-      this.tl.pause();
-      this.splitTextTimeline.pause();
-    },
-    resume: function() {
-      this.tl.resume();
-      this.splitTextTimeline.resume();
+      if (this.tl.paused()) {
+        this.tl.resume();
+        this.splitTextTimeline.resume();
+      } else {
+        this.tl.pause();
+        this.splitTextTimeline.pause();
+      }
     },
     reverse: function() {
-      this.tl.reverse();
       this.splitTextTimeline.reverse();
+      this.tl.reverse();
     }
   },
   created: function () {
@@ -130,6 +132,8 @@ h1, h2 {
 
 body {
   background: grey;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 ul {

@@ -10,27 +10,6 @@
       </NavBar>
       <router-view/>
       <div class='col-sm-1 d-btn btn' id='d-u' v-on:click="move">Do Stuff</div>
-      <!-- <div id="nav-test"></div>
-      <div class='row'>
-        <div class="col-sm-10"></div>
-        <div class="col-sm-2">
-          <div class="row">
-            <div class='col-sm-4'></div>
-            <div class='col-sm-4 d-btn' id='d-u' v-on:click="moveUp"></div>
-            <div class='col-sm-4'></div>
-          </div>
-          <div class="row">
-            <div class='col-sm-4 d-btn' id='d-l' v-on:click="moveLeft"></div>
-            <div class='col-sm-4'></div>
-            <div class='col-sm-4 d-btn' id='d-r' v-on:click="moveRight"></div>
-          </div>
-          <div class="row">
-            <div class='col-sm-4'></div>
-            <div class='col-sm-4 d-btn' id='d-d' v-on:click="moveDown"></div>
-            <div class='col-sm-4'></div>
-          </div>
-        </div>
-      </div> -->
 
     </div>
   </div>

@@ -12,6 +12,7 @@
       <div class='col-sm-1 d-btn btn' id='d-u' v-on:click="move">Do Stuff</div>
       <div class='col-sm-1 d-btn btn' id='pause' v-on:click="pause">Pause/Resume</div>
       <div class='col-sm-1 d-btn btn' id='reverse' v-on:click="reverse">Reverse</div>
+      <div class='col-sm-1 d-btn btn' id='reset' v-on:click="reset">Reset</div>
 
     </div>
   </div>
@@ -30,6 +31,7 @@ import Error404 from './components/Error404.vue'
 import TweenMax from "gsap/TweenMax";
 import TweenLite from "gsap/TweenLite";
 import TimelineLite from "gsap/TimelineLite";
+import TimelineMax from "gsap/TimelineMax";
 import SplitText from "gsap/SplitText";
 
 export default {
@@ -43,8 +45,10 @@ export default {
   },
   data () {
     return {
-      tl: new TimelineLite(),
-      splitTextTimeline: new TimelineLite(),
+      tl: new TimelineMax(),
+      splitTextTimeline: new TimelineMax(),
+      h1SplitText: '',
+      pSplitText: '',
       title: 'Vue Router Single Page Application - with a bunch of Greensock stuff added in',
       buttonLinks: [
         ['/home', 'Home'],
@@ -56,8 +60,9 @@ export default {
   },
   methods: {
     move: function() {
-      this.tl = new TimelineLite();
-      this.splitTextTimeline = new TimelineLite();
+
+      this.tl = new TimelineMax();
+      this.splitTextTimeline = new TimelineMax();
 
       TweenLite.set('body', {visibility:"visible"})
 
@@ -77,24 +82,23 @@ export default {
       this.tl.from('#nav-demo', 1, {left:-200, opacity:0});
 
       // SplitText stuff
-      var h1SplitText = new SplitText('h1', {type:"words"});
+      this.h1SplitText = new SplitText('h1', {type:"words"});
 
-      h1SplitText.split({type:"chars, words, lines"})
-      this.splitTextTimeline.staggerFrom(h1SplitText.chars, 0.2, {autoAlpha:0, scale:4, force3D:true}, 0.02, 4.0)
-        .staggerTo(h1SplitText.words, 0.1, {color:"#8FE402", scale:0.9}, 0.1, "words")
-        .staggerTo(h1SplitText.words, 0.2, {color:"white", scale:1}, 0.1, "words+=0.1")
-        .staggerTo(h1SplitText.lines, 0.5, {x:0, autoAlpha:1}, 0.2).eventCallback("onComplete", reset)
+      this.h1SplitText.split({type:"chars, words, lines"})
+      this.splitTextTimeline.staggerFrom(this.h1SplitText.chars, 0.2, {autoAlpha:0, scale:4, force3D:true}, 0.02, 4.0)
+        .staggerTo(this.h1SplitText.words, 0.1, {color:"#8FE402", scale:0.9}, 0.1, "words")
+        .staggerTo(this.h1SplitText.words, 0.2, {color:"white", scale:1}, 0.1, "words+=0.1")
+        .staggerTo(this.h1SplitText.lines, 0.5, {x:0, autoAlpha:1}, 0.2)
 
-      var pSplitText = new SplitText('p', {type:"words"});
-      pSplitText.split({type:"chars, words"})
-      this.tl.staggerFrom(pSplitText.chars, 0.4, {scale:7, autoAlpha:0,  rotationX:-180,  transformOrigin:"100% 50%", ease:Back.easeOut}, 0.02, 4.0);
+      this.pSplitText = new SplitText('p', {type:"words"});
+      this.pSplitText.split({type:"chars, words"})
+      this.tl.staggerFrom(this.pSplitText.chars, 0.4, {scale:7, autoAlpha:0,  rotationX:-180,  transformOrigin:"100% 50%", ease:Back.easeOut}, 0.02, 4.0);
 
       /// reset html to original state
       function reset(){
         h1SplitText.revert();
         pSplitText.revert();
       }
-
     },
     pause: function() {
       if (this.tl.paused()) {
@@ -108,6 +112,11 @@ export default {
     reverse: function() {
       this.splitTextTimeline.reverse();
       this.tl.reverse();
+    },
+    reset: function() {
+      TweenMax.set(['.jumbotron', '#nav-demo'], {clearProps:"all"});
+      this.h1SplitText.revert();
+      this.pSplitText.revert();
     }
   },
   created: function () {
